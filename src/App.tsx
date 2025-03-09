@@ -1,38 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
-import { Label } from "@/components/ui/label"
 import { CheckCircle, User, Plus, Edit, Trash2, Save, XCircle } from 'lucide-react';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 
-// Define types for health data
 interface HealthData {
   id: string;
   disease: string;
   symptoms: string;
   treatment: string;
   progress: string;
-  date: string; // Added date for tracking
+  date: string;
 }
 
 interface UserProfile {
   id: string;
   name: string;
   email: string;
-  // Add other profile properties as needed
 }
 
 const MedicalTreatmentTracker = () => {
-  // State for user profiles and current user
   const [userProfiles, setUserProfiles] = useState<UserProfile[]>(() => {
     if (typeof window !== 'undefined') {
       const savedProfiles = localStorage.getItem('userProfiles');
@@ -40,7 +24,6 @@ const MedicalTreatmentTracker = () => {
     }
     return [];
   });
-
   const [currentUser, setCurrentUser] = useState<UserProfile | null>(() => {
     if (typeof window !== 'undefined') {
       const savedUser = localStorage.getItem('currentUser');
@@ -49,9 +32,8 @@ const MedicalTreatmentTracker = () => {
     return null;
   });
 
-  // State for health data, new entry, and edit mode
   const [healthData, setHealthData] = useState<HealthData[]>(() => {
-    if (typeof window !== 'undefined') {
+    if (typeof window !== 'undefined' && currentUser) {
       const savedData = localStorage.getItem(`healthData_${currentUser?.id}`);
       return savedData ? JSON.parse(savedData) : [];
     }
@@ -63,7 +45,7 @@ const MedicalTreatmentTracker = () => {
     symptoms: '',
     treatment: '',
     progress: '',
-    date: new Date().toISOString().split('T')[0], // Initialize with current date
+    date: new Date().toISOString().split('T')[0],
   });
   const [isEditMode, setIsEditMode] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -71,7 +53,6 @@ const MedicalTreatmentTracker = () => {
   const [newProfile, setNewProfile] = useState<UserProfile>({ id: '', name: '', email: '' });
   const [error, setError] = useState<string | null>(null);
 
-  // Load and save data when currentUser changes
   useEffect(() => {
     if (typeof window !== 'undefined') {
       localStorage.setItem('userProfiles', JSON.stringify(userProfiles));
@@ -80,40 +61,33 @@ const MedicalTreatmentTracker = () => {
   }, [userProfiles, currentUser]);
 
   useEffect(() => {
-    if (currentUser) {
-      if (typeof window !== 'undefined') {
-        const savedData = localStorage.getItem(`healthData_${currentUser.id}`);
-        setHealthData(savedData ? JSON.parse(savedData) : []);
-      }
+    if (currentUser && typeof window !== 'undefined') {
+      const savedData = localStorage.getItem(`healthData_${currentUser.id}`);
+      setHealthData(savedData ? JSON.parse(savedData) : []);
     }
   }, [currentUser]);
 
   useEffect(() => {
-    if (currentUser) {
-      if (typeof window !== 'undefined') {
-        localStorage.setItem(`healthData_${currentUser.id}`, JSON.stringify(healthData));
-      }
+    if (currentUser && typeof window !== 'undefined') {
+      localStorage.setItem(`healthData_${currentUser.id}`, JSON.stringify(healthData));
     }
   }, [healthData, currentUser]);
 
-  // Handlers for input changes
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setNewEntry({
-      ...newEntry,
-      [e.target.name]: e.target.value,
-    });
+    setNewEntry({ ...newEntry, [e.target.name]: e.target.value });
   };
 
   const handleProfileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setNewProfile({
-      ...newProfile,
-      [e.target.name]: e.target.value,
-    });
+    setNewProfile({ ...newProfile, [e.target.name]: e.target.value });
   };
 
-  // Function to add a new entry
   const addEntry = () => {
-    if (!newEntry.disease.trim() || !newEntry.symptoms.trim() || !newEntry.treatment.trim() || !newEntry.progress.trim()) {
+    if (
+        !newEntry.disease.trim() ||
+        !newEntry.symptoms.trim() ||
+        !newEntry.treatment.trim() ||
+        !newEntry.progress.trim()
+    ) {
       setError("Please fill in all fields.");
       return;
     }
@@ -122,7 +96,7 @@ const MedicalTreatmentTracker = () => {
     const entryToAdd: HealthData = {
       ...newEntry,
       id: crypto.randomUUID(),
-      date: new Date().toISOString().split('T')[0], // Ensure date is captured on add
+      date: new Date().toISOString().split('T')[0],
     };
 
     setHealthData([...healthData, entryToAdd]);
@@ -132,11 +106,10 @@ const MedicalTreatmentTracker = () => {
       symptoms: '',
       treatment: '',
       progress: '',
-      date: new Date().toISOString().split('T')[0], // Reset date to current for next entry
+      date: new Date().toISOString().split('T')[0],
     });
   };
 
-  // Function to start editing an entry
   const startEdit = (id: string) => {
     const entryToEdit = healthData.find((entry) => entry.id === id);
     if (entryToEdit) {
@@ -146,16 +119,20 @@ const MedicalTreatmentTracker = () => {
     }
   };
 
-  // Function to save edited entry
   const saveEdit = () => {
-    if (!newEntry.disease.trim() || !newEntry.symptoms.trim() || !newEntry.treatment.trim() || !newEntry.progress.trim()) {
+    if (
+        !newEntry.disease.trim() ||
+        !newEntry.symptoms.trim() ||
+        !newEntry.treatment.trim() ||
+        !newEntry.progress.trim()
+    ) {
       setError("Please fill in all fields.");
       return;
     }
     setError(null);
 
     setHealthData(
-        healthData.map((entry) => (entry.id === editingId ? { ...newEntry, date: newEntry.date } : entry))
+        healthData.map((entry) => (entry.id === editingId ? { ...newEntry } : entry))
     );
     setIsEditMode(false);
     setEditingId(null);
@@ -165,31 +142,27 @@ const MedicalTreatmentTracker = () => {
       symptoms: '',
       treatment: '',
       progress: '',
-      date: new Date().toISOString().split('T')[0], // Reset date after edit
+      date: new Date().toISOString().split('T')[0],
     });
   };
 
-  // Function to delete an entry
   const deleteEntry = (id: string) => {
     setHealthData(healthData.filter((entry) => entry.id !== id));
   };
 
-  // Function to handle profile creation
   const handleCreateProfile = () => {
     if (!newProfile.name.trim() || !newProfile.email.trim()) {
       setError("Please fill in all profile fields.");
       return;
     }
     setError(null);
-
     const profileToAdd: UserProfile = { ...newProfile, id: crypto.randomUUID() };
     setUserProfiles([...userProfiles, profileToAdd]);
-    setCurrentUser(profileToAdd); // Auto-login new user
-    setNewProfile({ id: '', name: '', email: '' }); // Reset
+    setCurrentUser(profileToAdd);
+    setNewProfile({ id: '', name: '', email: '' });
     setIsCreatingProfile(false);
   };
 
-  // Function to handle login
   const handleLogin = (profileId: string) => {
     const profile = userProfiles.find(p => p.id === profileId);
     if (profile) {
@@ -197,258 +170,316 @@ const MedicalTreatmentTracker = () => {
     }
   };
 
-  // Function to handle logout
   const handleLogout = () => {
     setCurrentUser(null);
-    setHealthData([]); // Clear data on logout
+    setHealthData([]);
   };
 
-  // Function to switch user
   const handleSwitchUser = () => {
-    handleLogout(); // For simplicity, log out and show profile selection
+    handleLogout();
   };
 
   return (
-      <div className="min-h-screen bg-gray-100 dark:bg-gray-900 p-4">
+      <div className="min-h-screen bg-gradient-to-r from-purple-900 via-indigo-900 to-blue-900 p-6 text-white">
         <div className="max-w-4xl mx-auto">
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-6 flex items-center gap-2">
-            <CheckCircle className="w-8 h-8 text-green-500" />
-            Medical Treatment Tracker
-          </h1>
+          {/* Header */}
+          <header className="mb-8">
+            <h1 className="text-3xl font-extrabold flex items-center gap-2">
+              <CheckCircle className="w-8 h-8 text-green-500" />
+              Medical Treatment Tracker
+            </h1>
+          </header>
 
           {/* Profile Management Section */}
-          <div className="mb-8">
+          <section className="mb-8">
             {currentUser ? (
-                <div className="flex items-center justify-between bg-white dark:bg-gray-800 p-4 rounded-md shadow-sm">
+                <div className="flex justify-between items-center p-4 bg-gray-800 border border-gray-700 rounded-lg shadow-lg">
                   <div className="flex items-center gap-4">
-                    <User className="w-6 h-6 text-gray-500" />
+                    <User className="w-8 h-8 text-gray-300" />
                     <div>
-                      <p className="text-lg font-semibold text-gray-900 dark:text-white">
-                        Welcome, {currentUser.name}!
-                      </p>
-                      <p className="text-sm text-gray-500 dark:text-gray-400">
-                        Email: {currentUser.email}
-                      </p>
+                      <h2 className="text-xl font-semibold">{`Welcome, ${currentUser.name}!`}</h2>
+                      <p className="text-sm text-gray-300">{currentUser.email}</p>
                     </div>
                   </div>
-                  <div className="flex gap-2">
-                    <Button variant="outline" onClick={handleSwitchUser} className="bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white hover:bg-gray-300 dark:hover:bg-gray-600">
+                  <div className="flex gap-3">
+                    <button
+                        onClick={handleSwitchUser}
+                        className="px-4 py-2 bg-purple-900 hover:bg-purple-800 rounded cursor-pointer"
+                    >
                       Switch User
-                    </Button>
-                    <Button variant="destructive" onClick={handleLogout} className="bg-red-500 text-white hover:bg-red-600">
+                    </button>
+                    <button
+                        onClick={handleLogout}
+                        className="px-4 py-2 bg-purple-900 hover:bg-purple-800 rounded cursor-pointer"
+                    >
                       Logout
-                    </Button>
+                    </button>
                   </div>
                 </div>
             ) : (
-                <Card className="w-full max-w-md mx-auto">
-                  <CardHeader>
-                    <CardTitle>User Profile</CardTitle>
-                    <CardDescription>
-                      {isCreatingProfile ? 'Create a new profile' : 'Login to your existing profile'}
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    {isCreatingProfile ? (
-                        <>
-                          <div className="grid gap-4 py-4">
-                            <div className="grid grid-cols-4 items-center gap-4">
-                              <Label htmlFor="name" className="text-right">
-                                Name
-                              </Label>
-                              <Input
-                                  id="name"
-                                  name="name"
-                                  value={newProfile.name}
-                                  onChange={handleProfileInputChange}
-                                  className="col-span-3"
-                              />
-                            </div>
-                            <div className="grid grid-cols-4 items-center gap-4">
-                              <Label htmlFor="email" className="text-right">
-                                Email
-                              </Label>
-                              <Input
-                                  id="email"
-                                  name="email"
-                                  type="email"
-                                  value={newProfile.email}
-                                  onChange={handleProfileInputChange}
-                                  className="col-span-3"
-                              />
-                            </div>
-                          </div>
-                        </>
-                    ) : (
-                        <div className="grid gap-4 py-4">
-                          {userProfiles.length > 0 ? (
-                              userProfiles.map((profile) => (
-                                  <Button
-                                      key={profile.id}
-                                      variant="outline"
-                                      className="w-full justify-start bg-white dark:bg-gray-800 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
-                                      onClick={() => handleLogin(profile.id)}
-                                  >
-                                    {profile.name} ({profile.email})
-                                  </Button>
-                              ))
-                          ) : (
-                              <p className="text-gray-500 dark:text-gray-400">No profiles found. Create a new one.</p>
-                          )}
+                <div className="bg-gray-800 border border-gray-700 rounded-lg shadow-lg p-6">
+                  <div className="mb-4">
+                    <h2 className="text-2xl font-bold">
+                      {isCreatingProfile ? 'Create Profile' : 'Login'}
+                    </h2>
+                    <p className="text-sm text-gray-300">
+                      {isCreatingProfile
+                          ? 'Fill out your details to create a new profile.'
+                          : 'Select a profile to login.'}
+                    </p>
+                  </div>
+                  {isCreatingProfile ? (
+                      <div className="space-y-4">
+                        <div>
+                          <label htmlFor="name" className="block text-sm font-medium">
+                            Name
+                          </label>
+                          <input
+                              id="name"
+                              name="name"
+                              value={newProfile.name}
+                              onChange={handleProfileInputChange}
+                              className="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500"
+                          />
                         </div>
-                    )}
-                  </CardContent>
-                  <CardFooter>
-                    {isCreatingProfile ? (
-                        <>
-                          <Button type="button" variant="secondary" onClick={() => setIsCreatingProfile(false)}>
+                        <div>
+                          <label htmlFor="email" className="block text-sm font-medium">
+                            Email
+                          </label>
+                          <input
+                              id="email"
+                              name="email"
+                              type="email"
+                              value={newProfile.email}
+                              onChange={handleProfileInputChange}
+                              className="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500"
+                          />
+                        </div>
+                        <div className="flex justify-end gap-3">
+                          <button
+                              onClick={() => setIsCreatingProfile(false)}
+                              className="px-4 py-2 bg-gray-900 hover:bg-gray-800 rounded cursor-pointer"
+                          >
                             Cancel
-                          </Button>
-                          <Button type="submit" onClick={handleCreateProfile} className="bg-green-500 text-white hover:bg-green-600">
+                          </button>
+                          <button
+                              onClick={handleCreateProfile}
+                              className="px-4 py-2 bg-purple-900 hover:bg-purple-800 rounded cursor-pointer"
+                          >
                             Create Profile
-                          </Button>
-                        </>
-                    ) : (
-                        <Button type="button" variant="secondary" onClick={() => setIsCreatingProfile(true)}>
-                          <Plus className="w-4 h-4 mr-2" />
+                          </button>
+                        </div>
+                      </div>
+                  ) : (
+                      <div className="space-y-3">
+                        {userProfiles.length > 0 ? (
+                            userProfiles.map((profile) => (
+                                <button
+                                    key={profile.id}
+                                    onClick={() => handleLogin(profile.id)}
+                                    className="w-full text-left px-4 py-2 border border-gray-600 rounded hover:bg-gray-700 cursor-pointer"
+                                >
+                                  <span className="font-medium">{profile.name}</span> -{' '}
+                                  <span className="text-sm">{profile.email}</span>
+                                </button>
+                            ))
+                        ) : (
+                            <p className="text-gray-300">
+                              No profiles found. Please create a new one.
+                            </p>
+                        )}
+                        <button
+                            onClick={() => setIsCreatingProfile(true)}
+                            className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-purple-900 hover:bg-purple-800 rounded cursor-pointer"
+                        >
+                          <Plus className="w-4 h-4" />
                           Create New Profile
-                        </Button>
-                    )}
-                  </CardFooter>
-                </Card>
+                        </button>
+                      </div>
+                  )}
+                </div>
             )}
-          </div>
+          </section>
 
           {/* Health Data Input Section */}
           {currentUser && (
-              <div className="mb-8 p-6 bg-white dark:bg-gray-800 rounded-md shadow-sm">
-                <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mb-4">Add New Entry</h2>
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
-                  <div>
-                    <Label htmlFor="disease" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Disease</Label>
-                    <Input
-                        type="text"
-                        name="disease"
-                        id="disease"
-                        value={newEntry.disease}
-                        onChange={handleInputChange}
-                        className="mt-1"
-                    />
+              <>
+                <section className="mb-8 p-6 bg-gray-800 border border-gray-700 rounded-lg shadow-lg">
+                  <h2 className="text-2xl font-semibold mb-4">
+                    {isEditMode ? 'Edit Entry' : 'Add New Entry'}
+                  </h2>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                      <label htmlFor="disease" className="block text-sm font-medium">
+                        Disease
+                      </label>
+                      <input
+                          type="text"
+                          name="disease"
+                          id="disease"
+                          value={newEntry.disease}
+                          onChange={handleInputChange}
+                          className="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500"
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="symptoms" className="block text-sm font-medium">
+                        Symptoms
+                      </label>
+                      <input
+                          type="text"
+                          name="symptoms"
+                          id="symptoms"
+                          value={newEntry.symptoms}
+                          onChange={handleInputChange}
+                          className="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500"
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="treatment" className="block text-sm font-medium">
+                        Treatment
+                      </label>
+                      <input
+                          type="text"
+                          name="treatment"
+                          id="treatment"
+                          value={newEntry.treatment}
+                          onChange={handleInputChange}
+                          className="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500"
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="progress" className="block text-sm font-medium">
+                        Progress
+                      </label>
+                      <input
+                          type="text"
+                          name="progress"
+                          id="progress"
+                          value={newEntry.progress}
+                          onChange={handleInputChange}
+                          className="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500"
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="date" className="block text-sm font-medium">
+                        Date
+                      </label>
+                      <input
+                          type="date"
+                          name="date"
+                          id="date"
+                          value={newEntry.date}
+                          onChange={handleInputChange}
+                          className="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500"
+                      />
+                    </div>
                   </div>
-                  <div>
-                    <Label htmlFor="symptoms" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Symptoms</Label>
-                    <Input
-                        type="text"
-                        name="symptoms"
-                        id="symptoms"
-                        value={newEntry.symptoms}
-                        onChange={handleInputChange}
-                        className="mt-1"
-                    />
+                  {error && <p className="mt-2 text-red-500">{error}</p>}
+                  <div className="mt-4 flex gap-3">
+                    {isEditMode ? (
+                        <>
+                          <button
+                              onClick={saveEdit}
+                              className="px-4 py-2 bg-purple-900 hover:bg-purple-800 rounded flex items-center gap-2 cursor-pointer"
+                          >
+                            <Save className="w-4 h-4" /> Save
+                          </button>
+                          <button
+                              onClick={() => {
+                                setIsEditMode(false);
+                                setEditingId(null);
+                                setNewEntry({
+                                  id: '',
+                                  disease: '',
+                                  symptoms: '',
+                                  treatment: '',
+                                  progress: '',
+                                  date: new Date().toISOString().split('T')[0],
+                                });
+                              }}
+                              className="px-4 py-2 bg-gray-900 hover:bg-gray-800 rounded flex items-center gap-2 cursor-pointer"
+                          >
+                            <XCircle className="w-4 h-4" /> Cancel
+                          </button>
+                        </>
+                    ) : (
+                        <button
+                            onClick={addEntry}
+                            className="px-4 py-2 bg-purple-900 hover:bg-purple-800 rounded flex items-center gap-2 cursor-pointer"
+                        >
+                          <Plus className="w-4 h-4" /> Add Entry
+                        </button>
+                    )}
                   </div>
-                  <div>
-                    <Label htmlFor="treatment" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Treatment</Label>
-                    <Input
-                        type="text"
-                        name="treatment"
-                        id="treatment"
-                        value={newEntry.treatment}
-                        onChange={handleInputChange}
-                        className="mt-1"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="progress" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Progress</Label>
-                    <Input
-                        type="text"
-                        name="progress"
-                        id="progress"
-                        value={newEntry.progress}
-                        onChange={handleInputChange}
-                        className="mt-1"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="date" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Date</Label>
-                    <Input
-                        type="date"
-                        name="date"
-                        id="date"
-                        value={newEntry.date}
-                        onChange={handleInputChange}
-                        className="mt-1"
-                    />
-                  </div>
-                </div>
-                <div className="flex gap-2">
-                  {isEditMode ? (
-                      <Button onClick={saveEdit} className="bg-blue-500 text-white hover:bg-blue-600">
-                        <Save className="w-4 h-4 mr-2" />
-                        Save
-                      </Button>
-                  ) : (
-                      <Button onClick={addEntry} className="bg-green-500 text-white hover:bg-green-600">
-                        <Plus className="w-4 h-4 mr-2" />
-                        Add Entry
-                      </Button>
-                  )}
-                  {isEditMode && (
-                      <Button onClick={() => {
-                        setIsEditMode(false);
-                        setEditingId(null);
-                        setNewEntry({ id: '', disease: '', symptoms: '', treatment: '', progress: '', date: new Date().toISOString().split('T')[0] }); // Reset form
-                      }} variant="outline" className="bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white hover:bg-gray-300 dark:hover:bg-gray-600">
-                        <XCircle className="w-4 h-4 mr-2" />
-                        Cancel
-                      </Button>
-                  )}
-                </div>
-                {error && <p className="text-red-500 mt-2">{error}</p>}
-              </div>
-          )}
+                </section>
 
-          {/* Health Data Table */}
-          {currentUser && (
-              <div className="bg-white dark:bg-gray-800 rounded-md shadow-sm">
-                <Table>
-                  <TableCaption>A list of your medical treatment entries.</TableCaption>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead className="w-[100px]">Date</TableHead>
-                      <TableHead>Disease</TableHead>
-                      <TableHead>Symptoms</TableHead>
-                      <TableHead>Treatment</TableHead>
-                      <TableHead>Progress</TableHead>
-                      <TableHead className="text-right">Actions</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
+                {/* Health Data Table */}
+                <section className="bg-gray-800 border border-gray-700 rounded-lg shadow-lg overflow-x-auto">
+                  <table className="min-w-full divide-y divide-gray-700">
+                    <caption className="p-4 text-left text-sm text-gray-300">
+                      A list of your medical treatment entries.
+                    </caption>
+                    <thead className="bg-gray-700">
+                    <tr>
+                      <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
+                        Date
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
+                        Disease
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
+                        Symptoms
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
+                        Treatment
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
+                        Progress
+                      </th>
+                      <th className="px-6 py-3 text-right text-xs font-medium uppercase tracking-wider">
+                        Actions
+                      </th>
+                    </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-700">
                     {healthData.length > 0 ? (
                         healthData.map((entry) => (
-                            <TableRow key={entry.id}>
-                              <TableCell className="font-medium">{entry.date}</TableCell>
-                              <TableCell>{entry.disease}</TableCell>
-                              <TableCell>{entry.symptoms}</TableCell>
-                              <TableCell>{entry.treatment}</TableCell>
-                              <TableCell>{entry.progress}</TableCell>
-                              <TableCell className="text-right flex gap-2 justify-end">
-                                <Button variant="outline" size="icon" onClick={() => startEdit(entry.id)} className="bg-yellow-500 text-white hover:bg-yellow-600">
-                                  <Edit className="h-4 w-4" />
-                                </Button>
-                                <Button variant="destructive" size="icon" onClick={() => deleteEntry(entry.id)} className="bg-red-500 text-white hover:bg-red-600">
-                                  <Trash2 className="h-4 w-4" />
-                                </Button>
-                              </TableCell>
-                            </TableRow>
+                            <tr key={entry.id}>
+                              <td className="px-6 py-4 whitespace-nowrap">{entry.date}</td>
+                              <td className="px-6 py-4 whitespace-nowrap">{entry.disease}</td>
+                              <td className="px-6 py-4 whitespace-nowrap">{entry.symptoms}</td>
+                              <td className="px-6 py-4 whitespace-nowrap">{entry.treatment}</td>
+                              <td className="px-6 py-4 whitespace-nowrap">{entry.progress}</td>
+                              <td className="px-6 py-4 whitespace-nowrap text-right">
+                                <div className="flex justify-end gap-2">
+                                  <button
+                                      onClick={() => startEdit(entry.id)}
+                                      className="px-3 py-1 bg-purple-900 hover:bg-purple-800 rounded flex items-center gap-1 cursor-pointer"
+                                  >
+                                    <Edit className="w-4 h-4" />
+                                  </button>
+                                  <button
+                                      onClick={() => deleteEntry(entry.id)}
+                                      className="px-3 py-1 bg-red-900 hover:bg-red-800 rounded flex items-center gap-1 cursor-pointer"
+                                  >
+                                    <Trash2 className="w-4 h-4" />
+                                  </button>
+                                </div>
+                              </td>
+                            </tr>
                         ))
                     ) : (
-                        <TableRow>
-                          <TableCell colSpan={6} className="text-center">No entries yet.</TableCell>
-                        </TableRow>
+                        <tr>
+                          <td colSpan={6} className="px-6 py-4 text-center text-gray-300">
+                            No entries yet.
+                          </td>
+                        </tr>
                     )}
-                  </TableBody>
-                </Table>
-              </div>
+                    </tbody>
+                  </table>
+                </section>
+              </>
           )}
         </div>
       </div>

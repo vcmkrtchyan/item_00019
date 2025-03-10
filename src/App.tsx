@@ -193,7 +193,7 @@ const MedicalTreatmentTracker = () => {
           {/* Profile Management Section */}
           <section className="mb-8">
             {currentUser ? (
-                <div className="flex justify-between items-center p-4 bg-gray-800 border border-gray-700 rounded-lg shadow-lg">
+                <div className="flex justify-between items-center p-4 bg-[#132152] border border-[#183182] rounded-lg shadow-lg">
                   <div className="flex items-center gap-4">
                     <User className="w-8 h-8 text-gray-300" />
                     <div>
@@ -204,20 +204,20 @@ const MedicalTreatmentTracker = () => {
                   <div className="flex gap-3">
                     <button
                         onClick={handleSwitchUser}
-                        className="px-4 py-2 bg-purple-900 hover:bg-purple-800 rounded cursor-pointer"
+                        className="px-4 py-2 bg-[#9000FF] hover:bg-[#9000FF] rounded cursor-pointer"
                     >
                       Switch User
                     </button>
                     <button
                         onClick={handleLogout}
-                        className="px-4 py-2 bg-purple-900 hover:bg-purple-800 rounded cursor-pointer"
+                        className="px-4 py-2 bg-[#9000FF] hover:bg-[#9000FF] rounded cursor-pointer"
                     >
                       Logout
                     </button>
                   </div>
                 </div>
             ) : (
-                <div className="bg-gray-800 border border-gray-700 rounded-lg shadow-lg p-6">
+                <div className="bg-[#132152] border border-[#183182] rounded-lg shadow-lg p-6">
                   <div className="mb-4">
                     <h2 className="text-2xl font-bold">
                       {isCreatingProfile ? 'Create Profile' : 'Login'}
@@ -239,7 +239,7 @@ const MedicalTreatmentTracker = () => {
                               name="name"
                               value={newProfile.name}
                               onChange={handleProfileInputChange}
-                              className="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500"
+                              className="mt-1 block w-full rounded-md bg-[#141E42] border border-[#253876] text-white placeholder-gray-400 focus:border-[#253876] focus:ring-[#253876]"
                           />
                         </div>
                         <div>
@@ -252,19 +252,19 @@ const MedicalTreatmentTracker = () => {
                               type="email"
                               value={newProfile.email}
                               onChange={handleProfileInputChange}
-                              className="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500"
+                              className="mt-1 block w-full rounded-md bg-[#141E42] border border-[#253876] text-white placeholder-gray-400 focus:border-[#253876] focus:ring-[#253876]"
                           />
                         </div>
                         <div className="flex justify-end gap-3">
                           <button
                               onClick={() => setIsCreatingProfile(false)}
-                              className="px-4 py-2 bg-gray-900 hover:bg-gray-800 rounded cursor-pointer"
+                              className="px-4 py-2 bg-[#9000FF] hover:bg-[#9000FF] rounded cursor-pointer"
                           >
                             Cancel
                           </button>
                           <button
                               onClick={handleCreateProfile}
-                              className="px-4 py-2 bg-purple-900 hover:bg-purple-800 rounded cursor-pointer"
+                              className="px-4 py-2 bg-[#9000FF] hover:bg-[#9000FF] rounded cursor-pointer"
                           >
                             Create Profile
                           </button>
@@ -277,7 +277,7 @@ const MedicalTreatmentTracker = () => {
                                 <button
                                     key={profile.id}
                                     onClick={() => handleLogin(profile.id)}
-                                    className="w-full text-left px-4 py-2 border border-gray-600 rounded hover:bg-gray-700 cursor-pointer"
+                                    className="w-full text-left px-4 py-2 border border-[#253876] rounded hover:bg-[#253876] cursor-pointer"
                                 >
                                   <span className="font-medium">{profile.name}</span> -{' '}
                                   <span className="text-sm">{profile.email}</span>
@@ -290,7 +290,7 @@ const MedicalTreatmentTracker = () => {
                         )}
                         <button
                             onClick={() => setIsCreatingProfile(true)}
-                            className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-purple-900 hover:bg-purple-800 rounded cursor-pointer"
+                            className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-[#9000FF] hover:bg-[#9000FF] rounded cursor-pointer"
                         >
                           <Plus className="w-4 h-4" />
                           Create New Profile
@@ -304,7 +304,7 @@ const MedicalTreatmentTracker = () => {
           {/* Health Data Input Section */}
           {currentUser && (
               <>
-                <section className="mb-8 p-6 bg-gray-800 border border-gray-700 rounded-lg shadow-lg">
+                <section className="mb-8 p-6 bg-[#132152] border border-[#183182] rounded-lg shadow-lg">
                   <h2 className="text-2xl font-semibold mb-4">
                     {isEditMode ? 'Edit Entry' : 'Add New Entry'}
                   </h2>
@@ -319,7 +319,7 @@ const MedicalTreatmentTracker = () => {
                           id="disease"
                           value={newEntry.disease}
                           onChange={handleInputChange}
-                          className="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500"
+                          className="mt-1 block w-full rounded-md bg-[#141E42] border border-[#253876] text-white placeholder-gray-400 focus:border-[#253876] focus:ring-[#253876]"
                       />
                     </div>
                     <div>
@@ -332,7 +332,7 @@ const MedicalTreatmentTracker = () => {
                           id="symptoms"
                           value={newEntry.symptoms}
                           onChange={handleInputChange}
-                          className="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500"
+                          className="mt-1 block w-full rounded-md bg-[#141E42] border border-[#253876] text-white placeholder-gray-400 focus:border-[#253876] focus:ring-[#253876]"
                       />
                     </div>
                     <div>
@@ -345,7 +345,7 @@ const MedicalTreatmentTracker = () => {
                           id="treatment"
                           value={newEntry.treatment}
                           onChange={handleInputChange}
-                          className="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500"
+                          className="mt-1 block w-full rounded-md bg-[#141E42] border border-[#253876] text-white placeholder-gray-400 focus:border-[#253876] focus:ring-[#253876]"
                       />
                     </div>
                     <div>
@@ -358,7 +358,7 @@ const MedicalTreatmentTracker = () => {
                           id="progress"
                           value={newEntry.progress}
                           onChange={handleInputChange}
-                          className="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500"
+                          className="mt-1 block w-full rounded-md bg-[#141E42] border border-[#253876] text-white placeholder-gray-400 focus:border-[#253876] focus:ring-[#253876]"
                       />
                     </div>
                     <div>
@@ -371,7 +371,7 @@ const MedicalTreatmentTracker = () => {
                           id="date"
                           value={newEntry.date}
                           onChange={handleInputChange}
-                          className="mt-1 block w-full rounded-md bg-gray-700 border border-gray-600 text-white placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500"
+                          className="mt-1 block w-full rounded-md bg-[#141E42] border border-[#253876] text-white placeholder-gray-400 focus:border-[#253876] focus:ring-[#253876]"
                       />
                     </div>
                   </div>
@@ -381,7 +381,7 @@ const MedicalTreatmentTracker = () => {
                         <>
                           <button
                               onClick={saveEdit}
-                              className="px-4 py-2 bg-purple-900 hover:bg-purple-800 rounded flex items-center gap-2 cursor-pointer"
+                              className="px-4 py-2 bg-[#9000FF] hover:bg-[#9000FF] rounded flex items-center gap-2 cursor-pointer"
                           >
                             <Save className="w-4 h-4" /> Save
                           </button>
@@ -398,7 +398,7 @@ const MedicalTreatmentTracker = () => {
                                   date: new Date().toISOString().split('T')[0],
                                 });
                               }}
-                              className="px-4 py-2 bg-gray-900 hover:bg-gray-800 rounded flex items-center gap-2 cursor-pointer"
+                              className="px-4 py-2 bg-[#9000FF] hover:bg-[#9000FF] rounded flex items-center gap-2 cursor-pointer"
                           >
                             <XCircle className="w-4 h-4" /> Cancel
                           </button>
@@ -406,7 +406,7 @@ const MedicalTreatmentTracker = () => {
                     ) : (
                         <button
                             onClick={addEntry}
-                            className="px-4 py-2 bg-purple-900 hover:bg-purple-800 rounded flex items-center gap-2 cursor-pointer"
+                            className="px-4 py-2 bg-[#9000FF] hover:bg-[#9000FF] rounded flex items-center gap-2 cursor-pointer"
                         >
                           <Plus className="w-4 h-4" /> Add Entry
                         </button>
@@ -415,12 +415,12 @@ const MedicalTreatmentTracker = () => {
                 </section>
 
                 {/* Health Data Table */}
-                <section className="bg-gray-800 border border-gray-700 rounded-lg shadow-lg overflow-x-auto">
+                <section className="bg-[#132152] border border-[#183182] rounded-lg shadow-lg overflow-x-auto">
                   <table className="min-w-full divide-y divide-gray-700">
                     <caption className="p-4 text-left text-sm text-gray-300">
                       A list of your medical treatment entries.
                     </caption>
-                    <thead className="bg-gray-700">
+                    <thead className="bg-[#141E42]">
                     <tr>
                       <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
                         Date
@@ -455,7 +455,7 @@ const MedicalTreatmentTracker = () => {
                                 <div className="flex justify-end gap-2">
                                   <button
                                       onClick={() => startEdit(entry.id)}
-                                      className="px-3 py-1 bg-purple-900 hover:bg-purple-800 rounded flex items-center gap-1 cursor-pointer"
+                                      className="px-3 py-1 bg-[#9000FF] hover:bg-[#9000FF] rounded flex items-center gap-1 cursor-pointer"
                                   >
                                     <Edit className="w-4 h-4" />
                                   </button>

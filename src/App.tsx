@@ -116,6 +116,10 @@ const MedicalTreatmentTracker = () => {
       setNewEntry(entryToEdit);
       setIsEditMode(true);
       setEditingId(id);
+      // Scroll to the top smoothly when edit is triggered
+      if (typeof window !== 'undefined') {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
     }
   };
 
@@ -258,7 +262,7 @@ const MedicalTreatmentTracker = () => {
                         <div className="flex justify-end gap-3">
                           <button
                               onClick={() => setIsCreatingProfile(false)}
-                              className="px-4 py-2 bg-[#9000FF] hover:bg-[#9000FF] rounded cursor-pointer"
+                              className="px-4 py-2 bg-[#9000FF] hover:bg-[#0F021C] rounded cursor-pointer"
                           >
                             Cancel
                           </button>
@@ -371,7 +375,7 @@ const MedicalTreatmentTracker = () => {
                           id="date"
                           value={newEntry.date}
                           onChange={handleInputChange}
-                          className="mt-1 h-8 pl-2 block w-full rounded-md bg-[#141E42] border border-[#253876] text-white placeholder-gray-400 focus:border-[#253876] focus:ring-[#253876]"
+                          className="mt-1 h-8 pl-2 pr-2 block w-full rounded-md bg-[#141E42] border border-[#253876] text-white placeholder-gray-400 focus:border-[#253876] focus:ring-[#253876]"
                       />
                     </div>
                   </div>
@@ -398,7 +402,7 @@ const MedicalTreatmentTracker = () => {
                                   date: new Date().toISOString().split('T')[0],
                                 });
                               }}
-                              className="px-4 py-2 bg-[#9000FF] hover:bg-[#9000FF] rounded flex items-center gap-2 cursor-pointer"
+                              className="px-4 py-2 bg-[#9000FF] hover:bg-[#0F021C] rounded flex items-center gap-2 cursor-pointer"
                           >
                             <XCircle className="w-4 h-4" /> Cancel
                           </button>
@@ -455,13 +459,13 @@ const MedicalTreatmentTracker = () => {
                                 <div className="flex justify-end gap-2">
                                   <button
                                       onClick={() => startEdit(entry.id)}
-                                      className="px-3 py-1 bg-[#9000FF] hover:bg-[#9000FF] rounded flex items-center gap-1 cursor-pointer"
+                                      className="w-10 h-10 bg-[#9000FF] hover:bg-[#9000FF] rounded flex items-center justify-center cursor-pointer"
                                   >
                                     <Edit className="w-4 h-4" />
                                   </button>
                                   <button
                                       onClick={() => deleteEntry(entry.id)}
-                                      className="px-3 py-1 bg-red-900 hover:bg-red-800 rounded flex items-center gap-1 cursor-pointer"
+                                      className="w-10 h-10 bg-red-900 hover:bg-red-800 rounded flex items-center justify-center cursor-pointer"
                                   >
                                     <Trash2 className="w-4 h-4" />
                                   </button>
@@ -482,6 +486,11 @@ const MedicalTreatmentTracker = () => {
               </>
           )}
         </div>
+        <style>{`
+        input[type="date"]::-webkit-calendar-picker-indicator {
+          filter: brightness(0) invert(1);
+        }
+      `}</style>
       </div>
   );
 };

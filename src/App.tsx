@@ -116,7 +116,7 @@ const MedicalTreatmentTracker = () => {
       setNewEntry(entryToEdit);
       setIsEditMode(true);
       setEditingId(id);
-      // Scroll to the top smoothly when edit is triggered
+      // Smoothly scroll to top for editing
       if (typeof window !== 'undefined') {
         window.scrollTo({ top: 0, behavior: 'smooth' });
       }
@@ -451,10 +451,26 @@ const MedicalTreatmentTracker = () => {
                         healthData.map((entry) => (
                             <tr key={entry.id}>
                               <td className="px-6 py-4 whitespace-nowrap">{entry.date}</td>
-                              <td className="px-6 py-4 whitespace-nowrap">{entry.disease}</td>
-                              <td className="px-6 py-4 whitespace-nowrap">{entry.symptoms}</td>
-                              <td className="px-6 py-4 whitespace-nowrap">{entry.treatment}</td>
-                              <td className="px-6 py-4 whitespace-nowrap">{entry.progress}</td>
+                              <td className="px-6 py-4 whitespace-nowrap">
+                                <div title={entry.disease} className="max-w-[100px] truncate">
+                                  {entry.disease}
+                                </div>
+                              </td>
+                              <td className="px-6 py-4 whitespace-nowrap">
+                                <div title={entry.symptoms} className="max-w-[100px] truncate">
+                                  {entry.symptoms}
+                                </div>
+                              </td>
+                              <td className="px-6 py-4 whitespace-nowrap">
+                                <div title={entry.treatment} className="max-w-[100px] truncate">
+                                  {entry.treatment}
+                                </div>
+                              </td>
+                              <td className="px-6 py-4 whitespace-nowrap">
+                                <div title={entry.progress} className="max-w-[100px] truncate">
+                                  {entry.progress}
+                                </div>
+                              </td>
                               <td className="px-6 py-4 whitespace-nowrap text-right">
                                 <div className="flex justify-end gap-2">
                                   <button

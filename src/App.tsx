@@ -239,7 +239,7 @@ const MedicalTreatmentTracker = () => {
                               name="name"
                               value={newProfile.name}
                               onChange={handleProfileInputChange}
-                              className="mt-1 block w-full rounded-md bg-[#141E42] border border-[#253876] text-white placeholder-gray-400 focus:border-[#253876] focus:ring-[#253876]"
+                              className="mt-1 h-8 block w-full rounded-md bg-[#141E42] border border-[#253876] text-white placeholder-gray-400 focus:border-[#253876] focus:ring-[#253876]"
                           />
                         </div>
                         <div>
@@ -252,7 +252,7 @@ const MedicalTreatmentTracker = () => {
                               type="email"
                               value={newProfile.email}
                               onChange={handleProfileInputChange}
-                              className="mt-1 block w-full rounded-md bg-[#141E42] border border-[#253876] text-white placeholder-gray-400 focus:border-[#253876] focus:ring-[#253876]"
+                              className="mt-1 h-8 block w-full rounded-md bg-[#141E42] border border-[#253876] text-white placeholder-gray-400 focus:border-[#253876] focus:ring-[#253876]"
                           />
                         </div>
                         <div className="flex justify-end gap-3">
@@ -319,7 +319,7 @@ const MedicalTreatmentTracker = () => {
                           id="disease"
                           value={newEntry.disease}
                           onChange={handleInputChange}
-                          className="mt-1 block w-full rounded-md bg-[#141E42] border border-[#253876] text-white placeholder-gray-400 focus:border-[#253876] focus:ring-[#253876]"
+                          className="mt-1 h-8 block w-full rounded-md bg-[#141E42] border border-[#253876] text-white placeholder-gray-400 focus:border-[#253876] focus:ring-[#253876]"
                       />
                     </div>
                     <div>
@@ -332,7 +332,7 @@ const MedicalTreatmentTracker = () => {
                           id="symptoms"
                           value={newEntry.symptoms}
                           onChange={handleInputChange}
-                          className="mt-1 block w-full rounded-md bg-[#141E42] border border-[#253876] text-white placeholder-gray-400 focus:border-[#253876] focus:ring-[#253876]"
+                          className="mt-1 h-8 block w-full rounded-md bg-[#141E42] border border-[#253876] text-white placeholder-gray-400 focus:border-[#253876] focus:ring-[#253876]"
                       />
                     </div>
                     <div>
@@ -345,7 +345,7 @@ const MedicalTreatmentTracker = () => {
                           id="treatment"
                           value={newEntry.treatment}
                           onChange={handleInputChange}
-                          className="mt-1 block w-full rounded-md bg-[#141E42] border border-[#253876] text-white placeholder-gray-400 focus:border-[#253876] focus:ring-[#253876]"
+                          className="mt-1 h-8 block w-full rounded-md bg-[#141E42] border border-[#253876] text-white placeholder-gray-400 focus:border-[#253876] focus:ring-[#253876]"
                       />
                     </div>
                     <div>
@@ -358,7 +358,7 @@ const MedicalTreatmentTracker = () => {
                           id="progress"
                           value={newEntry.progress}
                           onChange={handleInputChange}
-                          className="mt-1 block w-full rounded-md bg-[#141E42] border border-[#253876] text-white placeholder-gray-400 focus:border-[#253876] focus:ring-[#253876]"
+                          className="mt-1 h-8 block w-full rounded-md bg-[#141E42] border border-[#253876] text-white placeholder-gray-400 focus:border-[#253876] focus:ring-[#253876]"
                       />
                     </div>
                     <div>
@@ -371,7 +371,7 @@ const MedicalTreatmentTracker = () => {
                           id="date"
                           value={newEntry.date}
                           onChange={handleInputChange}
-                          className="mt-1 block w-full rounded-md bg-[#141E42] border border-[#253876] text-white placeholder-gray-400 focus:border-[#253876] focus:ring-[#253876]"
+                          className="mt-1 h-8 block w-full rounded-md bg-[#141E42] border border-[#253876] text-white placeholder-gray-400 focus:border-[#253876] focus:ring-[#253876]"
                       />
                     </div>
                   </div>

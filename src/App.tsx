@@ -214,7 +214,7 @@ const MedicalTreatmentTracker = () => {
                     </button>
                     <button
                         onClick={handleLogout}
-                        className="px-4 py-2 border border-[#9000FF] text-[#9000FF] rounded cursor-pointer hover:bg-[#9000FF] hover:text-white"
+                        className="px-4 py-2 border border-[#9000FF] text-white rounded cursor-pointer hover:bg-[#9000FF] hover:text-white"
                     >
                       Logout
                     </button>
